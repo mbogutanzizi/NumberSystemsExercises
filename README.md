@@ -3,4 +3,7 @@ PDF generator for training number systems conversion
 
 JavaScript only, no server dependencies necessary.
 
-Thanks to https://github.com/parallax/jsPDF für the wonderful Javascript PDF library.
+Uses https://github.com/parallax/jsPDF for PDF generation.
+Uses https://jquery.com/.
+
+
