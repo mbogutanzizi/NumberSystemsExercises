@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="de-DE">
+
+  <head>
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="jspdf.umd.min.js"></script>
+  </head>
+  <title>Übungsblätter zu Binärer Arithmetik</title>
+  <body style="font-size:14pt;">
+
+
+    <script>
+
+      var decimals = [];
+      var decimals1=[];
+      var decimals2= [];
+      var decimals3= [];
+      var decimals4= [];
+      var results1=[];
+      var results2=[];
+      
+
+      //pseudorandom stuff taken from https://stackoverflow.com/a/19301306
+
+      var m_w = 123456789;
+      var m_z = 987654321;
+      var mask = 0xffffffff;
+
+      
+      function seed(i) {
+	  m_w = (123456789 + i) & mask;
+	  m_z = (987654321 - i) & mask;
+      }
+
+      function random()
+      {
+	  m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
+	  m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
+	  var result = ((m_z << 16) + (m_w & 65535)) >>> 0;
+	  result /= 4294967296;
+	  return result;
+      }
+      
+      function createPDF()
+      {
+	  doc= new jsPDF();
+	  
+	  sy=40;
+	  lh=5;
+	  tasks=8;
+	  fs_base=6;
+	  fs_text=12;
+	  fs_sol=8;
+	  sx=25;
+	  doc.setFontSize(16);
+	  doc.text("Übungsbeispiele Binäre Arithmetik",105,20,null,null,"center");
+	  doc.setFontSize(fs_text);
+
+	  doc.text("1) Addiere die folgenden Binärzahlen:",sx,sy);
+	  sy=sy+lh+lh;
+	  // values for dez -> bin
+	  for (i=0;i<tasks;i++)
+	  {
+	      decimals[i]=Math.floor(random()*512);
+	      decimals1[i]=Math.floor(random()*512);
+	      decimals2[i]=Math.floor(random()*512);
+
+	      l1=decimals1[i].toString(2);
+	      l2=decimals2[i].toString(2);
+	      results1[i]=decimals1[i]+decimals2[i];
+	      length_l1=l1.length;
+	      length_l2=l2.length;
+	      if (length_l1>length_l2)
+	      {
+		  console.log("eins");
+		  l2=l2.padStart(length_l1,"0");
+	      } else
+	      {
+		  l1=l1.padStart(length_l2,"0");
+	      }
+	
+	      l=String.fromCharCode(97+i);
+	      l=l+") ";
+	      doc.setFontSize(fs_text);
+	      doc.text(l,sx,sy);
+	      sy=sy+lh;
+	      doc.text(l1,sx,sy);
+	      width=doc.getTextDimensions(l1).w;
+	      doc.setFontSize(fs_base);
+	      doc.text("2",sx+width,sy);
+	      sy=sy+lh;
+	      doc.setFontSize(fs_text);
+	      doc.text(l2,sx,sy);
+	      doc.setFontSize(fs_base);
+	      doc.text("2",sx+width,sy);
+
+	      sy=sy+lh*2;
+	  }
+
+	  sy=40;
+	  sx=100;
+	  doc.setFontSize(fs_text);
+	  
+	  //   doc.text("2) Rechne ins Dezimal- und Dualsystem um:",sx,sy);
+	  // sy=sy+lh+lh;
+	  // // values for dez -> bin
+	  // for (i=0;i<tasks;i++)
+	  // {
+	  //     decimals2[i]=Math.floor(random()*2048);
+
+	  //     l=String.fromCharCode(97+i);
+	  //     l=l+") "+decimals2[i].toString(16).toUpperCase();
+	  //     doc.setFontSize(fs_text);
+	  //     doc.text(l,sx,sy);
+	  //     width=doc.getTextDimensions(l).w;
+	  //     doc.setFontSize(fs_base);
+	  //     doc.text("16",sx+width,sy);
+	  //     sy=sy+lh;
+	  // }
+	  
+
+	  	  doc.text("2) Subtrahiere die folgenden Binärzahlen:",sx,sy);
+	  sy=sy+lh+lh;
+	  // values for dez -> bin
+	  for (i=0;i<tasks;i++)
+	  {
+	      decimals[i]=Math.floor(random()*512);
+	      decimals1[i]=Math.floor(random()*512);
+	      decimals2[i]=Math.floor(random()*512);
+
+	      if (decimals1[i]<decimals2[i])
+	      {
+		  l2=decimals1[i].toString(2);
+		  l1=decimals2[i].toString(2);
+		  results2[i]=decimals2[i]-decimals1[i]; 
+	      } else {
+		  l1=decimals1[i].toString(2);
+		  l2=decimals2[i].toString(2);
+		  results2[i]=decimals1[i]-decimals2[i];
+	      }
+	      length_l1=l1.length;
+	      length_l2=l2.length;
+	      if (length_l1>length_l2)
+	      {
+		  console.log("eins");
+		  l2=l2.padStart(length_l1,"0");
+	      } else
+	      {
+		  l1=l1.padStart(length_l2,"0");
+	      }
+
+	      l=String.fromCharCode(97+i);
+	      l=l+") ";
+	      doc.setFontSize(fs_text);
+	      doc.text(l,sx,sy);
+	      sy=sy+lh;
+	      doc.text(l1,sx,sy);
+	      width=doc.getTextDimensions(l1).w;
+	      doc.setFontSize(fs_base);
+	      doc.text("2",sx+width,sy);
+	      sy=sy+lh;
+	      doc.setFontSize(fs_text);
+	      doc.text(l2,sx,sy);
+	      doc.setFontSize(fs_base);
+	      doc.text("2",sx+width,sy);
+
+	      sy=sy+lh*2;
+	  }
+
+
+
+	  
+	  sy=40+(tasks+5+5)*lh;
+	  sx=25;
+
+
+
+	  
+	  //  doc.setFontSize(fs_text);
+	  // doc.text("3) Stelle im Dezimalsystem dar:",sx,sy);
+	  // sy=sy+lh+lh;
+	  // // values for dez -> bin
+	  // for (i=0;i<tasks;i++)
+	  // {
+	  //     decimals3[i]=Math.floor(random()*1024);
+
+	  //     l=String.fromCharCode(97+i);
+	  //     l=l+") "+decimals3[i].toString(2).toUpperCase();
+	  //     doc.setFontSize(fs_text);
+	  //     doc.text(l,sx,sy);
+	  //     width=doc.getTextDimensions(l).w;
+	  //     doc.setFontSize(fs_base);
+	  //     doc.text("2",sx+width,sy);
+	  //     sy=sy+lh;
+	  // }
+
+	  //   sy=40+(tasks+5+5)*lh;
+	  // sx=100;
+	  //  doc.setFontSize(fs_text);
+	  // doc.text("4) Rechne ins Hexadezimalsystem um:",sx,sy);
+	  // sy=sy+lh+lh;
+	  // // values for dez -> bin
+	  // for (i=0;i<tasks;i++)
+	  // {
+	  //     decimals4[i]=Math.floor(random()*4096);
+
+	  //     l=String.fromCharCode(97+i);
+	  //     l=l+") "+decimals4[i].toString(2).toUpperCase();
+	  //     doc.setFontSize(fs_text);
+	  //     doc.text(l,sx,sy);
+	  //     width=doc.getTextDimensions(l).w;
+	  //     doc.setFontSize(fs_base);
+	  //     doc.text("2",sx+width,sy);
+	  //     sy=sy+lh;
+	  // }
+	  
+
+
+	  // solutions
+	  doc.setFontSize(12);
+	  doc.text("Lösungen",105,297-(20+(tasks+2)*lh),null,null,"center");
+	  
+	  sy=297-(20+(tasks+2)*lh);
+	  sx=25;
+	  doc.setFontSize(fs_sol);
+	  sy=sy+lh+lh;
+	  // values for dez -> bin
+	  for (i=0;i<tasks;i++)
+	  {
+	      //decimals3[i]=Math.floor(Math.random()*1024);
+	      
+	      l="1"+String.fromCharCode(97+i);
+	      l=l+") "+results1[i].toString(2).toUpperCase()+" ";
+	      doc.setFontSize(fs_sol);
+	      doc.text(l,sx,sy);
+	      width=doc.getTextDimensions(l).w;
+	      doc.setFontSize(fs_base);
+	      doc.text("2",sx+width,sy);
+	      sy=sy+lh;
+	  }
+
+
+	  
+	  sy=297-(20+(tasks+2)*lh);
+	  sx=55;
+	  doc.setFontSize(fs_sol);
+	  sy=sy+lh+lh;
+	  // values for dez -> bin
+	  for (i=0;i<tasks;i++)
+	  {
+	      //decimals2[i]=Math.floor(Math.random()*1024);
+	      
+	      l="2"+String.fromCharCode(97+i);
+	      l=l+") "+results2[i].toString(2)+" ";
+	      doc.setFontSize(fs_sol);
+	      doc.text(l,sx,sy);
+	      width1=doc.getTextDimensions(l).w;
+	      doc.setFontSize(fs_base);
+	      doc.text("2",sx+width1,sy);
+
+	      doc.setFontSize(fs_sol);
+	      
+	      // l=";"+decimals2[i].toString(2)+" ";
+	      // doc.text(l,sx+width1+3,sy);
+	      // width=doc.getTextDimensions(l).w;
+	      // doc.setFontSize(fs_base);
+	      // doc.text("2",sx+width1+width+3,sy);
+	      // doc.setFontSize(fs_sol);
+	      
+	      sy=sy+lh;
+	  }
+
+
+
+	  // sy=297-(20+(tasks+2)*lh);
+	  // sx=120;
+	  // doc.setFontSize(fs_sol);
+	  // sy=sy+lh+lh;
+	  // // values for dez -> bin
+	  // for (i=0;i<tasks;i++)
+	  // {
+	  //     //decimals3[i]=Math.floor(Math.random()*1024);
+	      
+	  //     l="3"+String.fromCharCode(97+i);
+	  //     l=l+") "+decimals3[i].toString(10).toUpperCase()+" ";
+	  //     doc.setFontSize(fs_sol);
+	  //     doc.text(l,sx,sy);
+	  //     width=doc.getTextDimensions(l).w;
+	  //     doc.setFontSize(fs_base);
+	  //     doc.text("10",sx+width,sy);
+	  //     sy=sy+lh;
+	  // }
+
+
+	  // sy=297-(20+(tasks+2)*lh);
+	  // sx=150;
+	  // doc.setFontSize(fs_sol);
+	  // sy=sy+lh+lh;
+	  // // values for dez -> bin
+	  // for (i=0;i<tasks;i++)
+	  // {
+	  //     //decimals3[i]=Math.floor(Math.random()*1024);
+	      
+	  //     l="4"+String.fromCharCode(97+i);
+	  //     l=l+") "+decimals4[i].toString(16).toUpperCase()+" ";
+	  //     doc.setFontSize(fs_sol);
+	  //     doc.text(l,sx,sy);
+	  //     width=doc.getTextDimensions(l).w;
+	  //     doc.setFontSize(fs_base);
+	  //     doc.text("16",sx+width,sy);
+	  //     sy=sy+lh;
+	  // }
+
+
+	  doc.setFontSize(12);
+	  doc.text("ID: "+$('#idnummer').val(),200,270,{"angle":90});
+
+	  
+	  
+	  doc.save("Übungsblatt Zahlensysteme-"+$('#idnummer').val()+".pdf");
+
+	  
+	  
+      }
+    </script>
+    
+    <script type="text/javascript">
+	  var jsPDF = window.jspdf.jsPDF;
+      var doc;
+       v=Math.floor(Math.random()*1000000);
+	 
+	  $(document).ready(function() {
+	  //    console.log("ok");
+	      if(jsPDF && jsPDF.version) {
+//		  $('#dversion').text('Version ' + jsPDF.version);
+		  
+//		  console.log("fertig"+jsPDF.version);
+	      }
+
+	     
+	     
+
+	      $('#idnummer').val(v);
+	      //  createPDF(v);
+	      //  $("#dlbutton").button();
+
+	      $("#dlbutton").on("click",function() {
+		  seed($('#idnummer').val());
+		  createPDF();
+	      });
+	  });
+
+
+      
+	</script>
+
+
+    <p>Hallo!</p>
+    <p>Hier kannst Du Übungsblätter zum Thema Binäre Arithemtik herunterladen.<p>
+      Die Übungsblätter sind beim Neu-Laden der Seite jedesmal neu, wenn Du einen gleichen nochmals möchtest, gib bitte die ID-Nummer am Zettel rechts unten ein, dann wird das gleiche Blatt nochmals erstellt.</p>
+    <p>Viel Erfolg beim Üben!!! - KJ</p>
+
+    <img src="thumbup.jpg" style="width:250px;">
+      <p>
+
+    
+      
+    
+    
+    <label for="idnumber">ID-Nummer</label>
+    <input type="text" id="idnummer"></input><hr>
+
+    <button id="dlbutton" class="ui-button ui-widget ui-corner-all">Übungszettel herunterladen</button>
+<p>
+<p>
+Source code on <a href="https://github.com/mbogutanzizi/NumberSystemsExercises">Github</a>.   
+
+  </body>
+</html>
